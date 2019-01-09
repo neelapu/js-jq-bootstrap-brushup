@@ -1,0 +1,591 @@
+Source code:
+
+Database
+
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+dbconnect.php
+
+
+$conn = new mysqli("localhost","root","","user_info");
+if($conn->connect_error){
+ die($conn->connect_error);
+}
+
+register.php
+
+
+<html>
+<head>
+<title>Register</title>
+<link href="style.css" rel="stylesheet" />
+<script type="text/javascript" src="jquery-2.2.1.js"></script>
+</head>
+<body>
+<div class="register_form">
+<p>Register</p>
+<form>
+<div>
+<span id="name_checked"></span>
+<input type="text" name="username" id="username" placeholder="Username" onkeyup="checkname();" />
+</div>
+<div>
+<span id="email_checked"></span>
+<input type="text" name="email" id="email" placeholder="Email" onkeyup="checkmail();" />
+</div>
+<div>
+<span id="password_checked"></span>
+<input type="password" name="password" id="password" placeholder="Password" onkeyup="checkpass();" />
+</div>
+<div>
+<span id="match"></span>
+<input type="password" name="match_password" id="match_password" placeholder="Retype password" onkeyup="matchpass();" />
+</div>
+<div>
+<input type="submit" name="submit" id="submit" value="Register" onclick="return results();" />
+</div>
+<div>
+Already a member? <a href="login.php">Login</a>
+</div>
+<br />
+<span id="success"></span>
+<span id="error"></span>
+</form>
+</div>
+<script type="text/javascript">
+//check the name
+function checkname(){
+ var name = $('#username').val();
+ if(name){
+  $.ajax({
+   url : "check.php",
+   type : "POST",
+   async : false,
+   data: {
+    check_name : name
+   },
+   success: function(response){
+    $('#name_checked').html(response);
+   }
+  })
+ }
+}
+//check the mail
+function checkmail(){
+ var email = $('#email').val();
+ if(email){
+  $.ajax({
+   url : "check.php",
+   type : "POST",
+   async : false,
+   data: {
+    check_email : email
+   },
+   success: function(response){
+    $('#email_checked').html(response);
+   }
+  })
+ }
+}
+//check the password
+function checkpass(){
+ var pass = $('#password').val();
+ if(pass){
+  $.ajax({
+   url : "check.php",
+   type : "POST",
+   async : false,
+   data: {
+    check_pass : pass
+   },
+   success: function(response){
+    $('#password_checked').html(response);
+   }
+  })
+ }
+}
+//check the match password
+function matchpass(){
+ var password = $('#password').val();
+ var retype = $('#match_password').val();
+ if(retype){
+  $.ajax({
+   url : "check.php",
+   type : "POST",
+   async : false,
+   data: {
+    match_password : password,
+    retype_password : retype
+   },
+   success: function(response){
+    $('#match').html(response);
+   }
+  })
+ }
+}
+function results(){
+ var username = $('#username').val();
+ var email = $('#email').val();
+ var password = $('#password').val();
+ if(username == '' || email == '' || password == ''){
+  $('#error').html("All fields required");
+ }
+ else{
+  $('#error').html('');
+  $.ajax({
+   url : "check_register.php",
+   type : "POST",
+   async : false,
+    data: {
+     reg_name : username,
+     reg_email : email,
+     reg_pass : password
+    },
+    success: function(data){
+     var username = $('#username').val('');
+     var email = $('#email').val('');
+     var password = $('#password').val(''); 
+     $('#success').html(data);
+    }
+  })
+ }
+ return false;
+}
+</script>
+</body>
+</html>
+
+login.php
+
+
+<html>
+<head>
+<title>login.php</title>
+<link href="style.css" rel="stylesheet" />
+<script type="text/javascript" src="jquery-2.2.1.js"></script>
+</head>
+<body>
+<div class="Login_form">
+<p>Login</p>
+<form>
+<div>
+<span id="name_checked"></span>
+<input type="text" name="username" id="username" placeholder="Username" onkeyup="checkname();" />
+</div>
+<div>
+<input type="password" name="password" id="password" placeholder="Password" />
+</div>
+<div>
+<input type="submit" name="login" id="login" value="Login" onclick="return logger();" />
+</div>
+<div>
+Not a member? <a href="register.php">Register</a>
+</div>
+<span id="logger_empty"></span>
+<span id="logger_error"></span>
+</form>
+</div>
+<script type="text/javascript">
+function logger(){
+ var username = $('#username').val();
+ var password = $('#password').val();
+ if(username == '' || password == ''){
+  $('#logger_empty').html("All fields are required");
+ }
+ else{
+  $('#logger_empty').html('');
+  $.ajax({
+   url: "login_connect.php",
+   type: "POST",
+   async: false,
+    data: {
+     logger_name : username,
+     logger_pass : password
+    },
+    success: function(response){
+     if(response == "Success"){
+      $(location).attr('href','user.php');
+     }
+     else{
+      $('#logger_error').html(response);
+     }
+    }
+  })
+ }
+ return false;
+}
+</script>
+</body>
+</html>
+
+style.css
+
+
+.register_form,.Login_form,.user_page{
+ background:#ffffff;
+ max-width:320px;
+ width:100%;
+ box-shadow:0px 0px 10px rgba(0,0,0,0.5);
+ margin:0 auto;
+ padding:10px 15px;
+}
+input{
+ outline:none;
+ width:100%;
+ border:1px solid #ffffff;
+ border-bottom:1px solid #003399;
+ margin: 0px 0px 20px;
+ padding:10px 15px;
+ box-sizing: border-box;
+}
+#submit,#login{
+ color:#ffffff;
+ background-color:#0099ff;
+ width:100%;
+ padding:10px 15px;
+}
+p{
+ line-height:2px;
+ margin: 0px 0px 20px;
+ padding:10px 15px;
+ text-align:center;
+}
+a{
+ text-decoration:none;
+}
+.error_report p{
+ width:92%;
+ margin:0px auto;
+ padding:10px;
+ border:1px solid #f2dede;
+ color: #994442;
+ background: #f2dede;
+ border-radius: 5px;
+ text-align: left;
+}
+.success_report p{
+ width:92%;
+ margin:0px auto;
+ padding:10px;
+ border:1px solid #99ff99;
+ color: #ffffff;
+ background: #66cc99;
+ border-radius: 5px;
+ text-align: left;
+}
+
+check.php
+
+
+<!--php
+session_start();
+require_once('dbconnect.php');
+$errors = array();
+//check the name
+if(isset($_POST['check_name'])){
+ $check_name = strip_tags($_POST['check_name']);
+ $sql = $conn--->query("SELECT * FROM users WHERE username='$check_name'");
+ $count = $sql->num_rows;
+ if($count >0){
+  array_push($errors,"username already exists");
+  ?>
+  <div class="error_report">
+  <p>Username exists</p>
+  </div>
+  <!--php
+ }
+ else if(!preg_match('/^[0-9a-zA-z_]{5,}$/',$check_name)){
+  array_push($errors,"username must contains 5 characters");
+  ?-->
+  <div class="error_report">
+  <p>Username must have 5 characters</p>
+  </div>
+  <!--php
+ }
+ else{
+  ?-->
+  <div class="success_report">
+  <p>OK</p>
+  </div>
+  <!--php
+ }
+ if(count($errors) == 0){
+  $_SESSION['username'] = 'No error';
+ }
+ else{
+  foreach($errors as $error){
+   $_SESSION['username'] = $error;
+  }
+ }
+}
+?-->
+//check the mail
+
+<!--php
+if(isset($_POST['check_email'])){
+ $check_email = strip_tags($_POST['check_email']);
+ $sql_email = $conn--->query("SELECT * FROM users WHERE email='$check_email'");
+ $count_email = $sql_email->num_rows;
+ if($count_email >0){
+  array_push($errors,"Email already exists");
+  ?>
+  <div class="error_report">
+  <p>Email exists</p>
+  </div>
+  <!--php
+ }
+ else if(!filter_var($check_email, FILTER_VALIDATE_EMAIL)){
+  array_push($errors,"Invalid email format");
+  ?-->
+  <div class="error_report">
+  <p>Invalid email format</p>
+  </div>
+  <!--php
+ }
+ else{
+  ?-->
+  <div class="success_report">
+  <p>All done</p>
+  </div>
+  <!--php
+ }
+ if(count($errors) == 0){
+  $_SESSION['email'] = 'No error';
+ }
+ else{
+  foreach($errors as $error){
+   $_SESSION['email'] = $error;
+  }
+ }
+}
+?-->
+// check the password
+
+<!--php
+if(isset($_POST['check_pass'])){
+ $password = strip_tags($_POST['check_pass']);
+ if(!preg_match('/^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z]).*$/',$password)){
+  array_push($errors,"Password must contains 0-9 a-z A-z");
+  ?-->
+  <div class="error_report">
+  <p>Password must contains 0-9 a-z A-Z</p>
+  </div>
+  <!--php
+ }
+ else{
+  ?-->
+  <div class="success_report">
+  <p>Well done</p>
+  </div>
+  <!--php
+ }
+ if(count($errors) == 0){
+  $_SESSION['password'] = 'No error';
+ }
+ else{
+  foreach($errors as $error){
+   $_SESSION['password'] = $error;
+  }
+ }
+}
+?-->
+// match password
+
+<!--php
+if(isset($_POST['match_password'])){
+ $match_password = strip_tags($_POST['match_password']);
+ $retype_password = strip_tags($_POST['retype_password']);
+ if($retype_password == $match_password){
+  ?-->
+  <div class="success_report">
+  <p>Matched</p>
+  </div>
+  <!--php
+ }
+ else{
+  array_push($errors,"Not matched");
+  ?-->
+  <div class="error_report">
+  <p>Not matched</p>
+  </div>
+  <!--php
+ }
+ if(count($errors) == 0){
+  $_SESSION['matched'] = 'No error';
+ }
+ else{
+  foreach($errors as $error){
+   $_SESSION['matched'] = $error;
+  }
+ }
+}
+?-->
+
+check_register.php
+
+
+<!--php
+session_start();
+require_once('dbconnect.php');
+$register_errors = array();
+// registeration
+ if(isset($_POST['reg_name'])){
+  $uname = strip_tags($_POST['reg_name']);
+  $email = strip_tags($_POST['reg_email']);
+  $upass = strip_tags($_POST['reg_pass']);
+  
+  $uname = $conn--->real_escape_string($uname);
+  $email = $conn->real_escape_string($email);
+  $upass = password_hash($conn->real_escape_string($upass), BCRYPT);
+  
+  // get the error messages
+  
+  $username_error = $_SESSION['username'];
+  $email_error = $_SESSION['email'];
+  $password_error = $_SESSION['password'];
+  $matched_error = $_SESSION['matched'];
+  
+  if($username_error !== "No error"){
+   array_push($register_errors, $username_error);
+  }
+  if($email_error !== "No error"){
+   array_push($register_errors, $email_error);
+  }
+  if($password_error !== "No error"){
+   array_push($register_errors, $password_error);
+  }
+  if($matched_error !== "No error"){
+   array_push($register_errors, $matched_error);
+  }
+  if(count($register_errors) == 0){
+   $register = $conn->query("INSERT into users(username,email,password) VALUES('$uname','$email','$upass')");
+   if($register){
+    ?>
+    <div class="success_report">
+    <p>Registered</p>
+    </div>
+    <!--php
+   }
+   else{
+    ?-->
+    <div class="error_report">
+    <p>Error... try again later</p>
+    </div>
+    <!--php
+   }
+  }
+ 
+
+ else{
+		 foreach($register_errors as $register_error){
+			 ?-->
+			 <div class="error_report">
+			 <p>
+			
+			 <!--php echo $register_error."<br /-->"; ?>
+                         </p>
+			 </div>
+			 <!--php
+		 }
+	 }
+
+
+
+
+ }
+?-->
+
+login_connect.php
+
+
+<!--php
+session_start();
+require_once('dbconnect.php');
+if(isset($_POST['logger_name'])){
+ $logger_username = strip_tags($_POST['logger_name']);
+ $logger_password = strip_tags($_POST['logger_pass']);
+ 
+ $logger_username = $conn--->real_escape_string($logger_username);
+ $logger_password = $conn->real_escape_string($logger_password);
+ 
+ $username_find = $conn->query("SELECT * FROM users WHERE username='$logger_username'");
+ if(($username_find->num_rows) == 0){
+  ?>
+  <div class="error_report">
+  <p>Such username doesnot exists</p>
+  </div>
+  <!--php
+ }
+ else{
+  $row = $username_find--->fetch_array();
+  if(password_verify($logger_password, $row['password'])){
+   $_SESSION['user_id'] = $row['user_id'];
+   $_SESSION['message'] = "you have logged in successfully";
+   echo "Success";
+  }
+  else{
+   ?>
+   <div class="error_report">
+   <p>Password does not match</p>
+   </div>
+   <!--php
+  }
+ }
+}
+?-->
+
+user.php
+
+
+<!--php
+session_start();
+require_once('dbconnect.php');
+$id = $_SESSION['user_id'];
+if(!isset($id)){
+ header("Location: login.php");
+}
+else{
+ $res = $conn--->query("SELECT * FROM users WHERE user_id='$id'");
+ $userRow = $res->fetch_array();
+}
+?>
+
+
+<html>
+<head>
+<title>Welcome <?php echo $userRow['username']; ?></title>
+<link href="style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="user_page">
+<div>
+<p>Welcome <!--php echo $userRow['username']; ?--></p>
+</div>
+<div>
+<p><!--php echo $_SESSION['message']; ?--></p>
+</div>
+<div>
+<p align="center"><a href="signout.php?signout">Signout</a></p>
+</div>
+</div> 
+</body>
+</html>
+
+signout.php
+
+
+session_start();
+if(!isset($_SESSION['user_id'])){
+ header("Location: login.php");
+}
+if(isset($_GET['signout'])){
+ session_destroy();
+ unset($_SESSION['user_id']);
+ header("Location: login.php");
+}

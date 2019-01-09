@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM</title>
+    <style>
+        #highlighted {
+            text-decoration: underline;
+        }
+        .bolded {
+            font-weight: bold;
+        }
+        .title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2rem;
+        }
+        .tHov { color:blue !important;}
+        .purple { background: purple;}
+        .active { text-decoration: line-through; opacity: .7; }
+        .selected { color:orange;}
+    </style>
+</head>
+<body>
+    
+
+    <h1>Hello!</h1>
+    <h1>Welcome</h1>
+
+    <div id="main"></div>
+    <ul>
+        <li id="highlighted">List <span>A</span></li>
+        <li class="bolded">List B</li>
+        <li class="bolded">List C</li>
+        <li id="highlighted">List D</li>
+    </ul>
+
+    <ul id="list">
+        <li>Item One</li>
+        <li>Item Two</li>
+        <li>Item Three</li>
+    </ul>
+
+    <p></p>
+    <a href="http://www.google.com">I am a Link</a>
+    <img src="06.png" alt="test">
+
+    <button>Toggle Background</button>
+
+    <script>
+        var tag = document.getElementById('highlighted');
+        var tags = document.getElementsByClassName('bolded');
+        var tagsname = document.getElementsByTagName('li');
+
+
+        var h1 = document.getElementsByTagName('h1');
+        h1[0].style.color = "red";
+
+        var h1q = document.querySelector('h1');
+        h1q.classList.add('title');
+
+        h1q.addEventListener('mouseover', function(){
+            this.classList.toggle('tHov');
+        });
+        h1q.addEventListener('mouseout', function(){
+            this.classList.toggle('tHov');
+        });
+
+
+        var link = document.querySelector('a');
+        link.setAttribute('href', 'http://www.neelapu.com');
+
+        var img = document.querySelector('img');
+        img.setAttribute('style','border:2px solid black; border-radius:20px;');
+
+
+        var btn = document.querySelector("button");
+        btn.addEventListener("click", changeBg);
+    
+        // var hasBackground = false;
+        // function changeBg() {
+            
+        //     var body = document.body;
+            
+        //     if(hasBackground) {
+        //         body.style.background = "white";
+        //     } else {
+        //         body.style.background = "purple";
+        //     }
+        //     hasBackground = !hasBackground;
+
+        // }
+
+        function changeBg(){
+            document.body.classList.toggle('purple');
+        }
+
+        var lis = document.querySelectorAll("#list li");
+
+        for(var i =0; i<lis.length; i++){
+
+            lis[i].addEventListener("mouseover", function(){
+                this.classList.add("selected");
+            });
+            lis[i].addEventListener("mouseout", function(){
+                this.classList.remove("selected");
+            });
+            lis[i].addEventListener("click", function(){
+                this.classList.toggle('active');
+            });
+        }
+
+    </script>
+</body>
+</html>

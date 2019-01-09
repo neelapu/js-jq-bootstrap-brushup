@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+    
+    <script>
+       
+        var person = {
+    
+  "name":"Raja",
+  "age": 32,
+  "address": {
+    
+    "street":"street 8",
+    "city":"Hyderabad"
+    
+  }
+  
+}
+
+person.job = "Software Professional";
+person.profile = function(){
+  
+    return this.name +' , '+ this.job + ' , ' + this.address.city;
+  
+}
+
+
+function addSquares(a, b){
+  
+  function square(x){
+    
+    return x * x;
+  }
+  
+  return square(a) + square(b);
+  
+}
+
+
+s1 = console.log(addSquares(3, 5));
+
+
+function outerFun(){
+  var name = "Hi there";
+  function innerFun(){
+    
+    console.log(name)
+    
+  }
+  
+  return innerFun;
+  
+}
+
+var callOuter = outerFun();
+callOuter();
+
+var teams = [ "IND", "SA", "ENG", "AUS", "WI"];
+var teamUp = [];
+
+teams.forEach(function(element){
+  
+    teamUp.push( element+" team" );
+  
+});
+
+teamUp.splice(3,0,"SLR team");
+teamUp.push("BAN team");
+
+var myList = [ "apple", { "price": 50 }, [ "kashmir", "shillong", "simla"], 12, "An apple keeps you away from doctor"];
+
+
+
+
+const d = 5;
+
+console.log(d);
+
+console.log(u);
+var u = {};
+console.log(u);
+
+
+var [xa,xb,xc] = m = [5,8,9];
+var [ya,yb,yc] = n = [3,1,5];
+
+console.log(xa+ya);
+
+
+
+
+
+const name = 'raja';
+console.log(name);
+
+var ooof = "hey";
+varTest();
+function varTest() {
+  
+  var _this = this;
+  var ooof = "OMG!";
+  
+  console.log(ooof);
+  console.log(_this.ooof);
+  
+  
+}
+
+console.log(this.ooof);
+
+
+var arrH = ["a","b","c"];
+var arrK = ["y","x","z"];
+
+var arrR = [ 2,"e", 8, null, "s", 0 ];
+// concat
+var arrConcat = arrH.concat(arrK);
+console.log(arrConcat);
+
+// indexOf 
+
+console.log(arrConcat.indexOf("y"));
+
+// join
+var arrN = arrH.join("-/-");
+console.log(arrN);
+console.log(arrH);
+
+// push - add last
+arrH.push("pushedC");
+
+console.log(arrH);
+
+// shift - remove first
+console.log(arrR);
+arrR.shift();
+console.log(arrR);
+
+// unshift - add  first
+arrR.unshift("a");
+console.log(arrR);
+
+// reverse 
+arrR.reverse();
+console.log(arrR);
+
+
+// sort
+arrR.sort();
+console.log(arrR);
+
+// pop - remove last
+arrR.pop();
+console.log(arrR);
+
+
+// lastIndexOf
+console.log(arrR.lastIndexOf("e"));
+
+
+// toString
+var kl = arrR.toString();
+console.log(kl);
+
+console.log(arrR);
+
+
+// slice - copy
+var arrR_new = arrR.slice(0,3);
+var arrR_new2 = arrR.slice();
+console.log(arrR_new);
+console.log(arrR);
+console.log(arrR_new2);
+
+
+// splice - modify
+arrR.splice( 2,0, "$","&"); // position
+console.log(arrR);
+arrR.splice( 5,0,"@","#");
+console.log(arrR);
+// arrR.splice( 4,1,"A"); // replace element by position
+console.log(arrR);
+
+// valueOf 
+
+//console.log(arrR.valueOf());
+
+// var timerName = new Date().getYear()+1900;
+var timerName = new Date().getTime();
+console.time(timerName);
+
+
+
+
+// Hoisting
+
+console.log(myVarX);
+var myVarX = "raja";
+console.log(myVarX);
+myvar2 = "n";
+console.log(myvar2);
+
+
+
+notHoisted();
+// hoistedFun();
+
+function notHoisted() {
+  
+  console.log("I am not hoisted!");
+}
+
+var hoistedFun = function() {
+    
+  console.log("hoisted Function!");
+  
+};
+
+
+
+let numbers = [ 7, 24, 33, 54, 61, 80, 160];
+
+
+console.log(numbers);
+let mappedNumbers = numbers.map( number => number*3 );
+
+
+console.log(mappedNumbers);
+
+let eveNums = numbers.filter( number => number%2 === 0);
+
+console.log(eveNums);
+let oddNums = numbers.filter( number => number%2 !== 0);
+
+console.log(oddNums);
+
+
+var redcNums = numbers.reduce( (acc, cur) => acc + cur );
+
+console.log(redcNums);
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

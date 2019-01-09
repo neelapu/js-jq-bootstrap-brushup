@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DOM</title>
+
+	<style>
+		.coolTitle {
+  text-align: center;
+  font-family: 'Oswald', Helvetica, sans-serif;
+  font-size: 40px;
+  transform: skewY(-10deg);
+  letter-spacing: 4px;
+  word-spacing: -8px;
+  color: tomato;
+  text-shadow: 
+    -1px -1px 0 firebrick,
+    -2px -2px 0 firebrick,
+    -3px -3px 0 firebrick,
+    -4px -4px 0 firebrick,
+    -5px -5px 0 firebrick,
+    -6px -6px 0 firebrick,
+    -7px -7px 0 firebrick,
+    -8px -8px 0 firebrick,
+    -30px 20px 40px dimgrey;
+}
+
+.done {
+  text-decoration: line-through;
+}
+button { cursor: pointer; }
+	</style>
+
+</head>
+<body>
+	<h1>Shopping List</h1>
+	<p id="first">Get it done today</p>
+	<input id="userinput" type="text" placeholder="enter items">
+	<button id="enter">Enter</button>
+	<ul>
+		<li class="bold red" random="23">Notebook</li>
+		<li>Jello</li>
+		<li>Spinach</li>
+		<li>Rice</li>
+		<li>Birthday Cake</li>
+		<li>Candles</li>
+	</ul>
+	<script>
+		
+		const h1 = document.querySelector('h1');
+		// h1.className = "coolTitle";
+		// h1.style.borderTop = "10px solid tomato";
+		// h1.classList.add('done');
+
+		//document.getElementsByTagName('body');
+		//document.getElementsByClassName('random');
+		//docuemnt.getElementById('userinput');
+
+		function toggleFun() {
+				this.classList.toggle('done');
+		}
+		h1.addEventListener('mouseover', toggleFun);
+		h1.addEventListener('mouseleave', toggleFun);
+
+		// function clickFun() {
+		// 	// prompt("Hello");
+		// 	this.parentElement.parentElement.style.backgroundColor = "#fff000";
+		// 	this.parentElement.setAttribute('id', 'listCart');
+		// }
+		// var lis = document.querySelectorAll('li');
+		// lis.forEach(function(item) {
+			
+		// 	if(item.getAttribute('random')){
+		// 		item.addEventListener('click', clickFun);
+		// 	}
+			
+		// });
+
+		// let btn = document.getElementsByTagName('button')[0];
+
+		// btn.addEventListener('click', function(){
+		// 	console.log('clicked!');
+		// });
+		
+
+		var button = document.getElementById('enter');
+		var input = document.getElementById('userinput');
+		var ul = document.querySelector('ul');
+		// button.addEventListener('click', function(e) {
+		// 	// alert('test');
+		// 	if(input.value.length > 0) {
+		// 		var li = document.createElement('li');
+		// 		li.appendChild(document.createTextNode(input.value));
+		// 		ul.appendChild(li);
+
+		// 	} else {
+		// 		input.focus();
+		// 	}
+		// 	input.value = '';
+		// });
+
+		input.addEventListener('keypress', function(e){
+			// console.log(event.which)
+			if(input.value.length > 0 && event.keyCode === 13 ) {
+				let li = document.createElement('li');
+				li.appendChild(document.createTextNode(input.value));
+				ul.appendChild(li);
+				input.value = '';
+			}
+		});
+
+
+
+	</script>
+
+</body>
+</html>

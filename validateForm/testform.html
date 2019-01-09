@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form validation with JavaScript</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="wrapper">
+   <form action="success.html" onsubmit="return Validate()" name="vform">
+   	<div id="username_div">
+   	  <label>Username</label> <br>
+   	  <input type="text" name="username" class="textInput">
+   	  <div id="name_error"></div>
+   	</div>
+   	<div id="email_div">
+   	  <label>Email</label> <br>
+   	  <input type="email" name="email" class="textInput">
+   	  <div id="email_error"></div>
+   	</div>
+   	<div id="password_div">
+   	  <label>Password</label> <br>
+   	  <input type="password" name="password" class="textInput">
+   	</div>
+   	<div id="pass_confirm_div">
+   	   <label>Password confirm</label> <br>
+   	   <input type="password" name="password_confirm" class="textInput">
+   	   <div id="password_error"></div>
+   	</div>
+   	<div>
+   	<input type="submit" name="register" value="Register" class="btn">
+   	</div>
+   </form>
+  </div>
+    
+    
+    
+  <script>
+    
+      var username = document.forms['vform']['username'];
+      var email = document.forms['vform']['email'];
+      var password = document.forms['vform']['password'];
+      var password_confirm = document.forms['vform']['password_confirm'];
+      
+      var name_error =  document.getElementById("name_error");
+      var email_error =  document.getElementById("email_error");
+      var password_error =  document.getElementById("password_error");
+      
+      username.addEventListener('blur', nameVerify, true);
+      email.addEventListener('blur', emailVerify, true);
+      
+      
+      function Validate() {
+          
+          
+          if(username.value == "") {
+              username.focus();
+              name_error.textContent = "Please provide name";
+              
+             // return false;
+          }
+         if(username.value.length < 4 ) {
+              username.focus();
+              name_error.textContent = "Name should be minimum 4 charcters";
+              name_error.style.color = "red";
+              return false;
+          }
+          if(email.value == "") {
+               if(email.value != "" && email.value >= 4 ){
+                   email_error.innerHTML = "";
+               }
+              email.focus();
+              
+              return false;
+          }
+          if(password.value == "") {
+              password.focus();
+              
+              return false;
+          }
+          if(password.value != password_confirm.value) {
+              
+              password_confirm.focus();
+              
+              return false;
+          }
+          
+          
+      }
+    
+      function nameVerify() {
+          if(username.value != "" && username.value.length >= 4){
+              name_error.innerHTML = "";
+              email.focus();
+          }
+      }
+      function emailVerify() {
+          if(email.value != "" && email.value.length >= 4){
+              email_error.innerHTML = "";
+              password.focus();
+          }
+      }
+      
+  </script>  
+</body>
+</html>

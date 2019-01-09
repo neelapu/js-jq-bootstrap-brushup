@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Call Apply Bind - this - OOP</title>
+</head>
+<body>
+
+
+
+    <script>
+        //this
+        console.log(this) //window
+
+        function whatIsThis(){
+            return this
+        }
+
+        function variablesInThis(){
+
+            this.person = "Ram"
+        }
+        
+        console.log(person);
+
+        whatIsThis() // window
+    
+        // implicit / object rule
+        var person = {
+            firstName: "Elie",
+            sayHi: function() {
+                return "Hi " + this.firstName
+            },
+            determineContext: function() {
+                return this === person
+            }
+        }
+
+        person.sayHi(); // Hi Elie
+        person.determineContext(); //true
+
+        //Nested Objects
+
+        var person = {
+            firstName: "Colt",
+            sayHi: function() {
+                return "Hi " + this.firstName;
+            },
+            determineContext: function() {
+                return this === person;
+            },
+            dog: {
+                sayHello: function() {
+                    return "Hello " + this.firstName;
+                },
+                determineContext: function() {
+                    return this === person;
+                }
+                
+            }
+
+        }
+        
+        person.sayHi();
+        person.dog.sayHello(); //undefined
+        person.dog.determineContext(); //undefined
+
+         // call, apply & bind can change the context of keyword 'this'.
+
+        // Call & apply will immediately invoke the function
+        // they are called on whereas bind will return a new function
+        // definition with the value of the keyword.
+
+
+        // call, apply & explicitly set the value of the keyword 'this'.
+        // We use them when we want full control over what the keyword 'this'
+        // will refer to
+
+
+        var person = {
+            firstName: "Colt",
+            sayHi: function() {
+                return "Hi " + this.firstName;
+            },
+            determineContext: function() {
+                return this === person;
+            },
+            dog: {
+                sayHello: function() {
+                    return "Hello " + this.firstName;
+                },
+                determineContext: function() {
+                    return this === person;
+                }
+                
+            }
+
+        }
+
+        person.sayHi() // Hi Colt
+        person.determineContext() //true
+        person.dog.sayHello.call(person) //Hi 
+        person.dog.determineContext.call(person);
+
+        // Refactor duplication using call method
+
+        var raja = {
+            firstName: "Raja",
+            sayHi: function() {
+                return `Hi ${this.firstName}`
+            }
+        }
+
+        // var hari = {
+        //     firstName: "Hari",
+        //     sayHi: function() {
+        //         return `Hi ${this.firstName}`
+        //     }
+        // }
+
+        var hari = {
+            firstName: "Hari"
+        }
+
+        raja.sayHi()
+        raja.sayHi.call(hari);
+
+        //apply - identical to call except parameters
+
+        var raja = {
+            firstName: "Raja",
+            addNumbers: function(a,b,c,d) {
+                return this.firstName + " just calculated " + (a+b+c+d);
+            }
+        }
+        
+        var sony = {
+            firstName: "Sony"
+        }
+
+        
+        raja.addNumbers(2,4,5,8) //Raja just calculated 19
+        raja.addNumbers.call(sony,5,6,8,9); // Sony calculated 28
+        raja.addNumbers.apply(sony,[5,6,8,9]); // Sony calculated 28
+
+        // Bind
+        // The parameters work like call, but bind returns a function with
+        // the context of 'this' bound already.
+
+
+        var raja = {
+            firstName: "Raja",
+            sayHi: function() {
+                return `Hi ${this.firstName}`
+            },
+            addNumbers: function(a,b,c,d) {
+                return `${this.firstName} - calculated ${a+b+c+d}`
+            }
+
+        }
+        var hari = {
+            firstName: "Hari"
+        }
+
+        var hariCalc = raja.addNumbers.bind(hari,3,4,5,7);
+        hariCalc();
+
+        //Bind 2
+
+        var john = {
+            firstName: "John",
+            sayHi: function() {
+                //setTimeout is called later and attached
+                // to widow here it's not bound to john object
+                // so this refers to undefined
+                setTimeout(function() {
+                    console.log(`Hi ${this.firstName}`);
+                },1000)
+            }
+        }
+
+        // solved
+        var john = {
+            firstName: "John",
+            sayHi: function() {
+                setTimeout(function(){
+                    console.log(`Hi ${this.firstName}`);
+                }.bind(this),1000);
+            }
+        }
+
+        john.sayHi(); // Hi John
+
+
+
+        //OOPs
+        //basic
+        // function Dog(name, age) {
+        //     this.name = name;
+        //     this.age = age;
+        //     this.bark = function(){
+        //     console.log(`${this.name} age ${this.age} - barked!`);
+        //     }
+        // }
+
+        function Dog(name, age) {
+            this.name = name;
+            this.age = age;
+
+        }
+
+        Dog.prototype.bark = function(){
+            console.log(`${this.name} age ${this.age} - barked!`);
+        }
+
+        var jimmy = new Dog("Jimmy", 3);
+        var ronny = new Dog("Ronny", 1);
+
+
+
+        function Car(make,model,year) {
+            this.make = make;
+            this.model = model;
+            this.year = year;
+
+            this.numWheels = 4;
+        }
+
+        function Motorcycle(make,model,year) {
+            //refactor using Call method
+            Car.call(this,make,model,year);
+            this.numWheels = 2;
+        }
+
+        function Auto(make,model,year) {
+            //refactor using apply method
+            Car.apply(this,[make,model,year]);
+            this.numWheels = 3;
+
+        }
+
+        function Heavyvehicle(make,model,year){
+            // even better using apply with arguments
+            Car.apply(this, arguments);
+            this.numWheels = 16;
+
+        }
+
+
+        var mtr1 = new Motorcycle('hero','splendor',2008) 
+        var cr1 = new Car('BMW','Classic',2010)
+        var at1 = new Auto('Tata','Ace',2015)
+        var hv1 = new Heavyvehicle('Volvo','Transco', 2009)
+
+        // class Car {
+            
+        //     constructor(make,model,year){
+        //         this.make = make;
+        //         this.model = model;
+        //         this.year = year;
+        //         this.numWheels = 4;
+        //     }
+        // }
+        
+        // class Motorcycle extends Car {
+
+        //     constructor() {
+        //         super(make,model,year);
+        //         this.numWheels = 2;
+        //     }
+        // }
+
+        function Vehicle(make,model,year){
+            this.make = make;
+            this.model = model;
+            this.year = year;
+            this.isRunning = false;
+        }
+
+        Vehicle.prototype.turnOn = function() {
+            this.isRunning = true;
+        }
+        Vehicle.prototype.turnOff = function() {
+            this.isRunning = false;
+        }
+        Vehicle.prototype.honk = function() {
+            if(isRunning){
+                return "Beep!";
+            }
+        }
+
+        //Closures
+        //A closure is function that makes use of variables defined in outer functions
+        //that have previously returned.
+
+        function outer() {
+            var data = "Hello ";
+            return function inner() {
+                var innerData = "World!";
+                return data + innerData;
+            }
+        }
+        outer()()// Hello World!
+
+
+        function outer(a){
+
+            return function(b){
+                return a+b;
+            }
+        }
+        outer(5)(5) //10
+        var callOuter = outer(5);
+        callOuter(10) // 5+10 15
+
+
+        // closures use make variables as private
+        function counter(){
+            var count = 0;
+
+            return function(){
+                return ++count;
+            }
+        }
+
+        counter1 = counter();
+        counter2 = counter();
+        counter1() //1
+        counter1() //2
+        counter1() //3
+        counter2(); //1
+        counter1() //4
+        
+
+        function colorsSet(){
+            var colors = ['red','green'];
+            return {
+                getColors: function(){
+                    return colors;
+                },
+                addColor: function(color){
+                    colors.push(color);
+                    return colors;
+                }
+            }
+        }
+
+        colorSet1 = colorsSet();
+        colorSet2 = colorsSet();
+
+        colorSet1.addColor('blue');
+        colorSet1.addColor('yellow');
+        colorSet1.addColor('purple');
+        colorSet1.getColors();
+        colorSet2.addColor('white');
+        counter2.getColors();
+
+
+    </script>
+    
+</body>
+</html>
